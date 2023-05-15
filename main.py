@@ -1,15 +1,13 @@
 import random
 import asyncio
+import string
+
 import aiofiles as aiofiles
 import re
 
 
 def generate_random_word():
-    letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    if random.random() > 0.5:
-        random_str = 'MARUTI'
-    else:
-        random_str = ''.join(random.choice(letters) for i in range(6))
+    random_str = random.choice(["MARUTI", ''.join(random.choices(string.ascii_uppercase+string.digits, k=6) ) ])
     return random_str
 
 
@@ -38,10 +36,11 @@ async def write_in_logfile(count1, count2):
 
 
 async def main():
-    await write_in_file()
-    count1, count2 = await read_in_file()
-    await write_in_logfile(count1, count2)
-    print("monitor file run successfully")
+    while True:
+        await write_in_file()
+        count1, count2 = await read_in_file()
+        await write_in_logfile(count1, count2)
+        print("monitor file run successfully")
 
 
 asyncio.run(main())
