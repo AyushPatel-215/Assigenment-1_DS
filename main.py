@@ -2,7 +2,7 @@ import random
 import asyncio
 import string
 
-import aiofiles as aiofiles
+import aiofiles
 import re
 
 
@@ -37,10 +37,16 @@ async def write_in_logfile(count1, count2):
 
 async def main():
     while True:
-        await write_in_file()
-        count1, count2 = await read_in_file()
-        await write_in_logfile(count1, count2)
-        print("monitor file run successfully")
+        task1 = asyncio.create_task(write_in_file())
+        await task1
 
+        task2 = asyncio.create_task(read_in_file())
+        count1, count2 = await task2
+
+        task3 = asyncio.create_task(write_in_logfile(count1, count2))
+        await task3
+
+        print("Monitor file run successfully")
+        await asyncio.sleep(2)
 
 asyncio.run(main())
